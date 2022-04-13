@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h3 style="font-style: italic; font-family: cursive;" >wall</h3>
+    </div>
+    
+    {% for post in posts %}
+        {% include "social/components/post.html" %}
+    {% endfor %}
+
+{% endblock %}
