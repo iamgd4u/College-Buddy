@@ -4,9 +4,13 @@ from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import SingleObjectMixin
 from social import models,forms
+from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.http import HttpResponse
 # Create your views here.
+
+
+User = get_user_model()
 
 class Wall(LoginRequiredMixin, ListView):
     #queryset = models.Post.objects.all()
@@ -15,9 +19,18 @@ class Wall(LoginRequiredMixin, ListView):
     login_url = "login/"
 
     def get_queryset(self):
-        return models.Post.objects.filter(
-            (Q(user__person1 = self.request.user.pk) or Q(user__person2 = self.request.user.pk)) and ~Q(user = self.request.user)
-        ).order_by("-created_at")
+        #models.Friends.objects.create(person1= User.objects.get(id = 1), person2= self.request.user)
+        friendIds = []
+        for friend in models.Friends.objects.filter(person1 = self.request.user):
+            friendIds.append(friend.person2.id)
+        for friend in models.Friends.objects.filter(person2 = self.request.user):
+            friendIds.append(friend.person1.id)
+
+        posts = models.Post.objects.filter(user = 2)
+       
+        #print(user__person1)
+        
+        return models.Post.objects.filter(user__in = friendIds).order_by("-created_at")
 
 class Profile(LoginRequiredMixin, ListView):
     login_url = "login/"

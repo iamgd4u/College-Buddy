@@ -2,7 +2,7 @@
 
 {% block content %}
     <div class="container">
-        <h4 style="font-style: italic; font-family: cursive;">HOME</h4>
+        <h4 style="font-style: italic; font-family: cursive;">PROFILE</h4>
         <form action="/post/" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ post_form }}

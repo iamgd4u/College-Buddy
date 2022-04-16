@@ -33,7 +33,7 @@
         <h4>Comments</h4>
         <ul>
             {% for comment in post.comment_set.all %}
-                {{user.username}} - {{comment.content}}
+                {{comment.user}} - {{comment.content}}
             {% endfor %}
         </ul>
         <form action="" method="post" onsubmit="commentPost({{post.id}}, document.getElementById('comment{{post.id}}').value)">
