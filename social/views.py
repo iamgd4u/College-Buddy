@@ -6,7 +6,7 @@ from django.views.generic.detail import SingleObjectMixin
 from social import models,forms
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 # Create your views here.
 
 
@@ -72,6 +72,7 @@ class PostComment(View):
             comment.post = post
             comment.user = request.user
             comment.save()
-            return HttpResponse(code = 204)
+            #return redirect('/')
+            return HttpResponse(status = 204)
         print(form.errors)
         return HttpResponse(code = 400)

@@ -31,7 +31,7 @@ urlpatterns = [
     path("signup/", auth_view.Signup.as_view(), name = "signup"),
 
     #social
-    path("accounts/profile/", social_view.Wall.as_view(), name = "home"),
+    path("accounts/profile/", social_view.Wall.as_view(), name = "accounts_profile"),
     path("profile/", social_view.Profile.as_view(), name = "profile"),
     path("post/", social_view.Post.as_view()),
     path("", social_view.Wall.as_view(), name = "home"),

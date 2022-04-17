@@ -17,7 +17,9 @@
                     </div>
                     <div class="card-action">
 
-                        <a href="#" onclick="likePost({{post.id}});"><strong style="color: crimson;">{{post.like_set.count}} LIKEs </strong></a>
+                        <a href="#" onclick="likePost({{post.id}});"><strong style="color: crimson;">{{post.like_set.count}} LIKEs </strong>
+                        </a>
+
                         <a class="modal-trigger" href="#postModal{{post.id}}"><strong style="color: crimson;">{{post.comment_set.count}} COMMENTS</strong></a>
 
                     </div>
@@ -33,14 +35,17 @@
         <h4>Comments</h4>
         <ul>
             {% for comment in post.comment_set.all %}
-                {{comment.user}} - {{comment.content}}
+                <li>
+                    {{comment.user}} - {{comment.content}}
+                    <hr>
+                </li>
             {% endfor %}
         </ul>
         <form action="" method="post" onsubmit="commentPost({{post.id}}, document.getElementById('comment{{post.id}}').value)">
             {% csrf_token %}
-            <div class="input-field col s6">
+            <class="input-field col s6">
                 <input placeholder="Add Comment here..." id="comment{{post.id}}" type="text" class="validate">
-                <label for="comment{{post.id}}">Comment</label>
+                <!-- <label for="comment{{post.id}}">Comment</label> -->
                 <button type="submit" >COMMENT!</button>
               </div>
         </form>
