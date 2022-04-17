@@ -7,6 +7,7 @@ from social import models,forms
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
+from chat.models import ChatModel
 
 
 # Create your views here.
@@ -102,3 +103,42 @@ def add(request, id):
     #models.Friends.objects.create(person1= User.objects.get(id = 1), person2= self.request.user)
     models.Friends.objects.create(person1=request.user, person2=User.objects.get(id = id))
     return redirect("/add-friends")
+
+
+
+#for chats
+def index(request):
+    friendIds = []
+    for friend in models.Friends.objects.filter(person1 = request.user):
+        friendIds.append(friend.person2.id)
+    for friend in models.Friends.objects.filter(person2 = request.user):
+        friendIds.append(friend.person1.id)
+    users = User.objects.filter(id__in = friendIds)
+    #sending friend ids
+    context = {"users": users,}
+    return render(request, "chat/index_chat.html", context)
+
+
+def chatPage(request, username):
+
+    friendIds = []
+    for friend in models.Friends.objects.filter(person1 = request.user):
+        friendIds.append(friend.person2.id)
+    for friend in models.Friends.objects.filter(person2 = request.user):
+        friendIds.append(friend.person1.id)
+    users = User.objects.filter(id__in = friendIds)
+    user_obj = User.objects.get(username = username)
+    
+    if request.user.id > user_obj.id:
+        thread_name = "chat_%s-%s" %(request.user.id, user_obj.id)
+    else:
+        thread_name = "chat_%s-%s" %(user_obj.id, request.user.id)
+    
+
+    message_obj = ChatModel.objects.filter(thread_name=thread_name)
+
+    context = { "users": users, "user":user_obj, "messages":message_obj}
+    return render(request, "chat/main_chat.html", context)
+
+
+    

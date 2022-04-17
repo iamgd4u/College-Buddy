@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'chat/index.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+{% endblock %}
+
+{% block content %}
+<div class="back-container">
+    <div class="container-fluid front-container">
+        <div class="back-top" style="background-color: orange;"></div>
+        <div class="back-main"></div>
+    </div>
+    <div class="container front-container1">
+        <div class="row chat-top" style="margin-bottom: 0px;">
+            <div class="col-sm-4 border-right border-secondary">
+                <img src="{% static 'chat/dp.png' %}" alt="" class="profile-image rounded-circle">
+                <span class="ml-2">{{request.user.username}}</span>
+
+
+            </div>
+            <div class="col-sm-8">
+                <img src="{% static 'chat/dp.png' %}" alt="" class="profile-image rounded-circle">
+                <span class="ml-2">{{user.username}}</span>
+                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 contacts">
+                <div class="contact-table-scroll">
+                    <table class="table table-hover">
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td><img src="{% static 'chat/dp.png' %}" alt="" class="profile-image rounded-circle">
+                                </td>
+                                <td><a href="{% url "chat" user.username %}">{{user.username}}</a></td>
+                            </tr>
+                            {% endfor %}
+
+                            <!-- end -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="col-sm-8 message-area">
+                <div class="message-table-scroll">
+                    <table class="table">
+                        <tbody id='chat-body'>
+                            {% for message in messages %}
+                            {% if message.sender == request.user.username %}
+                            <tr>
+                                <td>
+                                    <p class="bg-success p-2 mt-2 mr-5 shadow-sm text-white float-right rounded">
+                                        {{message.message}}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p><small class="p-1 shadow-sm">{{message.timestamp|time:'H:i'}}</small>
+                                    </p>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td>
+                                    <p class="bg-primary p-2 mt-2 mr-5 shadow-sm text-white float-left rounded">
+                                        {{message.message}}
+                                    </p>
+                                </td>
+                                <td>
+                                    <p><small class="p-1 shadow-sm">{{message.timestamp|time:'H:i'}}</small>
+                                    </p>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row message-box p-3">
+                    
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" id="message_input" placeholder="Write message...">
+
+                    </div>
+                    <div class="col-sm-2 mt-1">
+                        <div class="control">
+                            <button class="btn btn-success" id="chat-message-submit">Send</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{{user.id|json_script:"json-username"}}
+{{request.user.username|json_script:"json-message-username"}}
+{% endblock %}
+
+{% block javascript %}
+<script src={% static 'chat/chat.js' %}></script>
+{% endblock %}

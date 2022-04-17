@@ -41,6 +41,9 @@ urlpatterns = [
     path("post/<int:pk>/comment", social_view.PostComment.as_view()),
     #add-friends
     path("add-friends/", social_view.addFriends),
-    path("add/<int:id>", social_view.add, name="add")
+    path("add/<int:id>", social_view.add, name="add"),
+    #chat
+    path("start-chat/<str:username>", social_view.chatPage, name="chat"),
+    path("chat/", social_view.index, name = "chat_home")
     
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
