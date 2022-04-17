@@ -21,8 +21,9 @@
             <ul id="nav-mobile" class="right hide-on-med-and-down">
                 {% if user.is_authenticated %}
                 <li><a href="/profile/">{{ user.username }}</a></li>
+                <li><a href="/add-friends/">Add Friends</a></li>
                 <li><a href="/logout/">Logout</a></li>
-                <li><a href="collapsible.html">JavaScript</a></li>
+                
                 {% else %}
                 <li><a href="/login/">Login</a></li>
                 <li><a href="/signup/">SignUp</a></li>

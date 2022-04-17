@@ -7,6 +7,8 @@ from social import models,forms
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
+
+
 # Create your views here.
 
 
@@ -26,7 +28,7 @@ class Wall(LoginRequiredMixin, ListView):
         for friend in models.Friends.objects.filter(person2 = self.request.user):
             friendIds.append(friend.person1.id)
 
-        posts = models.Post.objects.filter(user = 2)
+        #posts = models.Post.objects.filter(user = 2)
        
         #print(user__person1)
         
@@ -76,3 +78,27 @@ class PostComment(View):
             return HttpResponse(status = 204)
         print(form.errors)
         return HttpResponse(code = 400)
+
+
+def addFriends(request):
+
+    friendIds = []
+    for friend in models.Friends.objects.filter(person1 = request.user):
+        friendIds.append(friend.person2.id)
+    for friend in models.Friends.objects.filter(person2 = request.user):
+        friendIds.append(friend.person1.id)
+    friendIds.append(request.user.id)
+
+    persons = models.User.objects.exclude(id__in = friendIds)
+    #persons = models.Post.objects.filter(user__in = friendIds).order_by("-created_at")
+    
+    context = {
+        "persons": persons
+    }
+    return render(request, "social/add_friends.html", context)
+
+def add(request, id):
+    print(id)
+    #models.Friends.objects.create(person1= User.objects.get(id = 1), person2= self.request.user)
+    models.Friends.objects.create(person1=request.user, person2=User.objects.get(id = id))
+    return redirect("/add-friends")
